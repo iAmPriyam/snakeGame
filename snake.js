@@ -38,20 +38,23 @@ function pickLocation() {
 }
 
 function keyPressed() {
-    if (keyCode === UP_ARROW && s.getYspeed() == 0) {
+    if (keyCode === UP_ARROW && s.getYspeed() == 0 && !s.pause) {
         s.direction(0, -1);
     }
-    if (keyCode === DOWN_ARROW && s.getYspeed() == 0) {
+    if (keyCode === DOWN_ARROW && s.getYspeed() == 0 && !s.pause) {
         s.direction(0, 1);
     }
-    if (keyCode === RIGHT_ARROW && s.getXspeed() == 0) {
+    if (keyCode === RIGHT_ARROW && s.getXspeed() == 0 && !s.pause) {
         s.direction(1, 0);
     }
-    if (keyCode === LEFT_ARROW && s.getXspeed() == 0) {
+    if (keyCode === LEFT_ARROW && s.getXspeed() == 0 && !s.pause) {
         s.direction(-1, 0);
     }
-    if (s.dead) {
-        if (keyCode === ENTER) {
+    if (keyCode === ESCAPE) {
+        s.pause = !s.pause;
+    }
+    if (keyCode === ENTER) {
+        if (s.pause || s.dead) {
             s.reset();
         }
     }
@@ -59,8 +62,8 @@ function keyPressed() {
 
 function Snake() {
     //this.food= createVector(floor(random(floor(width / snakeScale))), floor(random(floor(height / snakeScale))));
-    this.x = floor(width / 2);
-    this.y = floor(height / 2);
+    this.x = floor(width / 2) - snakeScale;
+    this.y = floor(height / 2) - snakeScale;
     this.xspeed = floor(Math.random() * 10) % 2;
     this.yspeed = (this.xspeed + 1) % 2;
     this.total = 3;
@@ -69,13 +72,14 @@ function Snake() {
         createVector(this.x - 2, this.y - 2),
         createVector(this.x - 1, this.y - 1),
     ];
-    this.dead = false;
+    this.dead = true;
     this.score = 0;
     this.highScore = 0;
+    this.pause = false;
 
     this.reset = function () {
-        this.x = floor(width / 2);
-        this.y = floor(height / 2);
+        this.x = floor(width / 2) - snakeScale;
+        this.y = floor(height / 2) - snakeScale;
         this.xspeed = floor(Math.random() * 10) % 2;
         this.yspeed = (this.xspeed + 1) % 2;
         this.total = 3;
@@ -90,7 +94,7 @@ function Snake() {
     };
 
     this.update = function () {
-        if (!this.dead) {
+        if (!this.dead && !this.pause) {
             if (this.total === this.tail.length) {
                 for (let i = 0; i < this.total; i++) {
                     this.tail[i] = this.tail[i + 1];
