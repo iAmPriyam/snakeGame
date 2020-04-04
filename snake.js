@@ -46,10 +46,6 @@ function keyPressed() {
     if (keyCode === LEFT_ARROW && s.getXspeed() == 0) {
         s.direction(-1, 0);
     }
-    if (keyCode === ENTER) {
-        s.total++;
-    }
-
     if (s.dead) {
         if (keyCode === ENTER) {
             s.reset();
@@ -83,6 +79,7 @@ function Snake() {
             createVector(this.x - 1, this.y - 1),
         ];
         this.dead = false;
+        this.score = 0;
     };
 
     this.update = function () {
@@ -103,7 +100,7 @@ function Snake() {
     };
 
     this.show = function () {
-        fill(255);
+        fill(0, 255, 100);
         for (let i = 0; i < this.total; i++) {
             rect(this.tail[i].x, this.tail[i].y, snakeScale, snakeScale);
         }
@@ -117,8 +114,10 @@ function Snake() {
 
     this.eat = function (pos) {
         let distance = dist(this.x, this.y, pos.x, pos.y);
-        if (distance < 1) {
+        if (distance < snakeScale - 1) {
             this.total++;
+            this.score++;
+            console.log(this.score);
             return true;
         } else {
             return false;
