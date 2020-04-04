@@ -1,9 +1,13 @@
 let s;
 const snakeScale = 20;
 var foodPosition;
+const scoreCard = document.querySelector(".score-card");
+const highScore = document.querySelector(".high-score");
 
 function setup() {
-    createCanvas(600, 600);
+    const can = createCanvas(600, 600);
+    const parentDiv = document.querySelector(".game-wrapper");
+    can.parent(parentDiv);
     s = new Snake();
     frameRate(10);
     pickLocation();
@@ -55,10 +59,10 @@ function keyPressed() {
 
 function Snake() {
     //this.food= createVector(floor(random(floor(width / snakeScale))), floor(random(floor(height / snakeScale))));
-    this.x = 1;
-    this.y = 0;
-    this.xspeed = 1;
-    this.yspeed = 0;
+    this.x = floor(width / 2);
+    this.y = floor(height / 2);
+    this.xspeed = floor(Math.random() * 10) % 2;
+    this.yspeed = (this.xspeed + 1) % 2;
     this.total = 3;
     this.tail = [
         createVector(this.x - 3, this.y - 3),
@@ -66,12 +70,14 @@ function Snake() {
         createVector(this.x - 1, this.y - 1),
     ];
     this.dead = false;
+    this.score = 0;
+    this.highScore = 0;
 
     this.reset = function () {
-        this.x = 1;
-        this.y = 0;
-        this.xspeed = 1;
-        this.yspeed = 0;
+        this.x = floor(width / 2);
+        this.y = floor(height / 2);
+        this.xspeed = floor(Math.random() * 10) % 2;
+        this.yspeed = (this.xspeed + 1) % 2;
         this.total = 3;
         this.tail = [
             createVector(this.x - 3, this.y - 3),
@@ -80,6 +86,7 @@ function Snake() {
         ];
         this.dead = false;
         this.score = 0;
+        scoreCard.innerHTML = this.score.toString();
     };
 
     this.update = function () {
@@ -118,6 +125,11 @@ function Snake() {
             this.total++;
             this.score++;
             console.log(this.score);
+            this.highScore =
+                this.highScore > this.score ? this.highScore : this.score;
+            // var temp = parseInt(this.score);
+            scoreCard.innerHTML = this.score.toString();
+            highScore.innerHTML = this.highScore.toString();
             return true;
         } else {
             return false;
