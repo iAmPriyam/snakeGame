@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    background: url("../images/bg.jpg");
+    background-size: cover;
+    display: flex;
+    align-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.game-wrapper {
+    margin-top: 3%;
+}
+
+h1,
+span {
+    margin: auto;
+    color: white;
+    font-family: "Press Start 2P", cursive;
+    padding: 40px 0px;
+    display: inline;
+    font-size: 2em;
+}
+
+h1 {
+    margin-left: 2em;
+}
+span {
+    margin-left: 1em;
+}
+
+.msg-screen {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    font-family: "Press Start 2P", cursive;
+    color: rgb(227, 91, 31);
+    font-size: 2rem;
+}
+
+.msg-screen h3 {
+    margin: 2em 0;
+    text-align: center;
+}
+
+.msg-screen h2 {
+    margin: 2em 0;
+    text-align: center;
+    animation: blinker 1s ease-in-out infinite;
+}
+
+.msg-screen .help {
+    width: 100%;
+    color: white;
+    text-emphasis: none;
+    font-size: 1rem;
+    text-align: center;
+    padding: 1rem 0;
+    font-family: "Press Start 2P", cursive;
+}
+
+ul {
+    padding-left: 30%;
+    margin-top: 100px;
+}
+
+li {
+    list-style: none;
+    font-size: 1rem;
+    margin: 3rem 0;
+}
+
+li::before {
+    content: "o  ";
+    font-weight: bold;
+}
+
+@keyframes blinker {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+canvas {
+    margin: 70px;
+    display: block;
+    border-top: #ccc 1.2em solid;
+    border-right: #ccc 1.2em solid;
+    border-bottom: #777 1.2em solid;
+    border-left: #777 1.2em solid;
+}
