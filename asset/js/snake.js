@@ -1,64 +1,4 @@
-let s;
-const snakeScale = 20;
-var foodPosition;
-const scoreCard = document.querySelector(".score-card");
-const highScore = document.querySelector(".high-score");
-
-function setup() {
-    const can = createCanvas(600, 600);
-    const parentDiv = document.querySelector(".game-wrapper");
-    can.parent(parentDiv);
-    s = new Snake();
-    frameRate(10);
-    pickLocation();
-}
-
-function draw() {
-    background(51);
-    s.isOver();
-    s.update();
-    s.show();
-
-    if (s.eat(foodPosition)) {
-        pickLocation();
-    }
-
-    fill(255, 0, 100);
-    rect(foodPosition.x, foodPosition.y, snakeScale, snakeScale);
-}
-
-function pickLocation() {
-    let cols = floor(width / snakeScale);
-    let rows = floor(height / snakeScale);
-    foodPosition = createVector(
-        floor(random(floor(width / snakeScale))),
-        floor(random(floor(height / snakeScale)))
-    );
-    foodPosition.mult(snakeScale);
-}
-
-function keyPressed() {
-    if (keyCode === UP_ARROW && s.getYspeed() == 0 && !s.pause) {
-        s.direction(0, -1);
-    }
-    if (keyCode === DOWN_ARROW && s.getYspeed() == 0 && !s.pause) {
-        s.direction(0, 1);
-    }
-    if (keyCode === RIGHT_ARROW && s.getXspeed() == 0 && !s.pause) {
-        s.direction(1, 0);
-    }
-    if (keyCode === LEFT_ARROW && s.getXspeed() == 0 && !s.pause) {
-        s.direction(-1, 0);
-    }
-    if (keyCode === ESCAPE) {
-        s.pause = !s.pause;
-    }
-    if (keyCode === ENTER) {
-        if (s.pause || s.dead) {
-            s.reset();
-        }
-    }
-}
+const messenger = new verdict();
 
 function Snake() {
     //this.food= createVector(floor(random(floor(width / snakeScale))), floor(random(floor(height / snakeScale))));
@@ -68,9 +8,9 @@ function Snake() {
     this.yspeed = (this.xspeed + 1) % 2;
     this.total = 3;
     this.tail = [
-        createVector(this.x - 3, this.y - 3),
-        createVector(this.x - 2, this.y - 2),
-        createVector(this.x - 1, this.y - 1),
+        createVector(this.x, this.y - 3 * snakeScale),
+        createVector(this.x, this.y - 2 * snakeScale),
+        createVector(this.x, this.y - 1 * snakeScale),
     ];
     this.dead = true;
     this.score = 0;
@@ -84,13 +24,15 @@ function Snake() {
         this.yspeed = (this.xspeed + 1) % 2;
         this.total = 3;
         this.tail = [
-            createVector(this.x - 3, this.y - 3),
-            createVector(this.x - 2, this.y - 2),
-            createVector(this.x - 1, this.y - 1),
+            createVector(this.x, this.y - 3 * snakeScale),
+            createVector(this.x, this.y - 2 * snakeScale),
+            createVector(this.x, this.y - 1 * snakeScale),
         ];
+        this.pause = false;
         this.dead = false;
         this.score = 0;
         scoreCard.innerHTML = this.score.toString();
+        messenger.clear();
     };
 
     this.update = function () {
@@ -134,6 +76,7 @@ function Snake() {
             // var temp = parseInt(this.score);
             scoreCard.innerHTML = this.score.toString();
             highScore.innerHTML = this.highScore.toString();
+            messenger.greet();
             return true;
         } else {
             return false;
@@ -154,6 +97,7 @@ function Snake() {
                     this.dead = true;
                     this.xspeed = 0;
                     this.yspeed = 0;
+                    messenger.over();
                 }
             }
         }
